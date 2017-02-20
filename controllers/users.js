@@ -6,9 +6,9 @@ let config = require('../configs/config.json')
 module.exports = {
   createUser: (req, res) => {
     Users.create({
-      username: req.body.username_reg,
-      password: hash.generate(req.body.password_reg),
-      email: req.body.email_reg
+      username: req.body.username,
+      password: hash.generate(req.body.password),
+      email: req.body.email
     }).then(function (data) {
       res.send(data)
     }).catch(function (err) {
@@ -64,7 +64,7 @@ module.exports = {
     })
   },
 
-  logout: (req, res) => {
+  destroySession: (req, res) => {
     req.session.destroy()
     res.send({message: 'User session destroyed'})
   }

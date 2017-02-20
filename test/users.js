@@ -25,11 +25,11 @@ describe('API status and response', function () {
         .get('/auth')
         .end(function (err, res) {
           res.should.have.status(success(res.status))
-          res.should.be.a('string')
+          res.should.be.an('object')
           res.body.endpoints.should.equalTo([
-            '/auth/register',
-            '/auth/login',
-            '/auth/logout',
+            '/auth/users/register',
+            '/auth/users/login',
+            '/auth/users/logout',
             '/auth/users',
             '/auth/users/:id'
           ])
@@ -51,7 +51,7 @@ describe('API status and response', function () {
           createdId = res.body._id
           res.should.have.status(success(res.status))
           res.should.be.an('object')
-          res.body.name.should.equal('fadly')
+          res.body.username.should.equal('fadly')
           done()
         })
     })
@@ -68,7 +68,7 @@ describe('API status and response', function () {
         .end(function (err, res) {
           res.should.have.status(success(res.status))
           res.should.be.an('object')
-          req.body.should.have.deep.property('token')
+          res.body.should.have.deep.property('token')
           done()
         })
     })
@@ -87,7 +87,7 @@ describe('API status and response', function () {
     })
   })
 
-  describe('PUT /auth/users/update/:id', function () {
+  describe('PUT /auth/users/:id', function () {
     it('should return 200 <= status < 300 || status === 304, an object, and res.body.email should equal dummy[2]', function (done) {
       chai.request(url)
         .put(`/auth/users/${createdId}`)
@@ -104,14 +104,27 @@ describe('API status and response', function () {
     })
   })
 
-  describe('DELETE /auth/users/delete/:id', function () {
+  describe('DELETE /auth/users/:id', function () {
     it('should return 200 <= status < 300 || status === 304, an object, and res.body should have property message', function (done) {
       chai.request(url)
-        .delete(`/auth/users/delete/${createdId}`)
+        .delete(`/auth/users/${createdId}`)
         .end(function (err, res) {
           res.should.have.status(success(res.status))
           res.body.should.be.an('object')
           res.body.should.have.deep.property('message')
+          done()
+        })
+    })
+  })
+
+  describe('GET /auth/users/logout', function () {
+    it('should return 200 <= status < 300 || status === 304, an object, and res.body.message should equal User session destroyed', function (done) {
+      chai.request(url)
+        .get(`/auth/users/logout`)
+        .end(function (err, res) {
+          res.should.have.status(success(res.status))
+          res.body.should.be.an('object')
+          res.body.message.should.equal('User session destroyed')
           done()
         })
     })
