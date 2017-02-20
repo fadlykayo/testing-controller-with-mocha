@@ -54,7 +54,6 @@ module.exports = {
         let token = jwt.sign({data}, config.secret, {algorithm: 'HS256'}, {expiresIn: '1h'})
         req.session.isLogin = true
         res.send({
-          s: true,
           token: token
         })
       } else {
